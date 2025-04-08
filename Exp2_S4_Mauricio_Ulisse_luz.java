@@ -36,7 +36,6 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
         String asiento;
         boolean entradaValida = false;
         boolean inputIsValid = false;
-        boolean itemWasAdded = false;
         String tipoDeAsiento;
         int numeroDeAsiento;
         Map<String, int[]> precioEntrada = null;
@@ -128,7 +127,6 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
                 do {
 
                     inputIsValid = false;
-                    itemWasAdded = false;
 
                     // Pedir número de asiento.
                     do {
@@ -139,30 +137,28 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
 
                         if (matcher.matches()) {
                             inputIsValid = true;
+
+                            // Chequear asiento disponible.
+                            for (int i = 0; i < entradas.size(); i++) {
+                                Map<String, double[]> entrada = entradas.get(i);
+                                List<Map.Entry<String, double[]>> items = new ArrayList<>(entrada.entrySet());
+
+                                for (int j = 0; j < items.size(); j++) {
+                                    Map.Entry<String, double[]> item = items.get(j);
+                                    String key = item.getKey();
+
+                                    if (key.equalsIgnoreCase(asiento)) {
+                                        System.out.println();
+                                        System.out.println("**Este asiento ya fue ingresado**");
+                                        System.out.println();
+                                        inputIsValid = false;
+                                    }
+                                }
+                            }
+
                         }
 
                     } while (!inputIsValid);
-
-                    // Chequear asiento disponible.
-                    do {
-                        for (int i = 0; i < entradas.size(); i++) {
-                            Map<String, double[]> entrada = entradas.get(i);
-                            List<Map.Entry<String, double[]>> items = new ArrayList<>(entrada.entrySet());
-
-                            for (int j = 0; j < items.size(); j++) {
-                                Map.Entry<String, double[]> item = items.get(j);
-                                String key = item.getKey();
-
-                                if (key.equalsIgnoreCase(asiento)) {
-                                    System.out.println();
-                                    System.out.println("**Este asiento ya fue ingresado**");
-                                    System.out.println();
-                                    itemWasAdded = true;
-                                }
-                            }
-                        }
-
-                    } while (itemWasAdded);
 
                     tipoDeAsiento = asiento.substring(0, 1);
                     numeroDeAsiento = Integer.parseInt(asiento.substring(1, asiento.length()));
@@ -174,6 +170,8 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
                             entradaValida = true;
                         } else {
                             System.out.println("**La entrada ingresada no existe**");
+                            System.out.println();
+                            entradaValida = false;
                         }
                     } else if (tipoDeAsiento.equalsIgnoreCase("b")) {
                         if (numeroDeAsiento < 4 || (numeroDeAsiento > 9 && numeroDeAsiento < 16)
@@ -182,6 +180,8 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
                             entradaValida = true;
                         } else {
                             System.out.println("**La entrada ingresada no existe**");
+                            System.out.println();
+                            entradaValida = false;
                         }
                     } else if (tipoDeAsiento.equalsIgnoreCase("c")) {
                         if (numeroDeAsiento > 36 && numeroDeAsiento < 61) {
@@ -189,9 +189,13 @@ public class Exp2_S4_Mauricio_Ulisse_luz {
                             entradaValida = true;
                         } else {
                             System.out.println("**La entrada ingresada no existe**");
+                            System.out.println();
+                            entradaValida = false;
                         }
                     } else {
                         System.out.println("**La entrada ingresada no existe**");
+                        System.out.println();
+                        entradaValida = false;
                     }
 
                 } while (!entradaValida);
